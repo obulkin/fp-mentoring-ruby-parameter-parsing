@@ -1,14 +1,14 @@
 require_relative "../lib/parser"
 
 RSpec.describe Parser do
-  describe ".run" do
+  describe ".decode" do
     it "parses a flat param" do
-      expect(Parser.run("name=foo")).to match({ name: "foo" })
+      expect(Parser.decode("name=foo")).to match({ name: "foo" })
     end
 
     context "an array" do
       xit "will parse correctly" do
-        expect(Parser.run("pets=cats,dogs")).to match({
+        expect(Parser.decode("pets=cats,dogs")).to match({
           pets: %w{cats dogs}
         })
       end
@@ -16,7 +16,7 @@ RSpec.describe Parser do
 
     context "nested param" do
       xit "will parse correctly" do
-        expect(Parser.run("user[name]=mike")).to match({
+        expect(Parser.decode("user[name]=mike")).to match({
           user: {
             name: "mike"
           }
@@ -24,7 +24,7 @@ RSpec.describe Parser do
       end
 
       xit "with multiple attributes will parse correctly" do
-        expect(Parser.run("user[name]=mike&user[pets]=cats,dogs")).to match({
+        expect(Parser.decode("user[name]=mike&user[pets]=cats,dogs")).to match({
           user: {
             name: "mike",
             pets: %w{cats dogs}
@@ -34,7 +34,7 @@ RSpec.describe Parser do
 
       xit "with multiple hashes will parse correctly" do
         message = URI::encode("Hello world!")
-        expect(Parser.run("user[name]=mike&user[pets]=cats,dogs&message[body]=#{message}")).to match({
+        expect(Parser.decode("user[name]=mike&user[pets]=cats,dogs&message[body]=#{message}")).to match({
           user: {
             name: "mike",
             pets: %w{cats dogs}
@@ -44,6 +44,26 @@ RSpec.describe Parser do
           }
         })
       end
+    end
+  end
+
+  describe ".encode" do
+    xit "will turn a shallow hash into a rest string" do
+      info = { name: "foo" }
+
+      expect(Parser.encode(info)).to eq("name=foo")
+    end
+
+    xit "will turn a nested hash into a rest string" do
+      info = { user: { name: "brian" } }
+
+      expect(Parser.encode(info)).to eq("user[name]=brian")
+    end
+
+    xit "will turn a complicated nested hash into a rest string" do
+      info = { user: { name: "brian", job: "boss" }, type: "complicated" }
+
+      expect(Parser.encode(info)).to eq("user[name]=brian&user[job]=boss&type=complicated")
     end
   end
 end
