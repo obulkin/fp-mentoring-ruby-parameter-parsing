@@ -7,7 +7,7 @@ RSpec.describe Parser do
     end
 
     context "an array" do
-      xit "will parse correctly" do
+      it "will parse correctly" do
         expect(Parser.decode("pets=cats,dogs")).to match({
           pets: %w{cats dogs}
         })
@@ -15,7 +15,7 @@ RSpec.describe Parser do
     end
 
     context "nested param" do
-      xit "will parse correctly" do
+      it "will parse correctly" do
         expect(Parser.decode("user[name]=mike")).to match({
           user: {
             name: "mike"
@@ -23,7 +23,7 @@ RSpec.describe Parser do
         })
       end
 
-      xit "with multiple attributes will parse correctly" do
+      it "with multiple attributes will parse correctly" do
         expect(Parser.decode("user[name]=mike&user[pets]=cats,dogs")).to match({
           user: {
             name: "mike",
