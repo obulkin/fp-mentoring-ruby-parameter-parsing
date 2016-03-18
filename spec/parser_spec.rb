@@ -6,6 +6,13 @@ RSpec.describe Parser do
       expect(Parser.decode("name=foo")).to match({ name: "foo" })
     end
 
+    it "parses a compound param" do
+      expect(Parser.decode("name=sally&job=developer")).to match({
+        name: "foo",
+        job: "developer",
+      })
+    end
+
     context "an array" do
       xit "will parse correctly" do
         expect(Parser.decode("pets=cats,dogs")).to match({
@@ -38,6 +45,21 @@ RSpec.describe Parser do
           user: {
             name: "mike",
             pets: %w{cats dogs}
+          },
+          message: {
+            body: "Hello world!"
+          }
+        })
+      end
+
+      xit "with a 3 level hash will parse correctly" do
+        message = URI::encode("Hello world!")
+        expect(Parser.decode("user[name]=mike&user[pets][name]=fido&message[body]=#{message}"to match({
+          user: {
+            name: "mike",
+            pets: {
+              name: "fido"
+            }
           },
           message: {
             body: "Hello world!"
