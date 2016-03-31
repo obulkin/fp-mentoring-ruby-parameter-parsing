@@ -1,4 +1,5 @@
 require_relative "../lib/parser"
+require "uri"
 
 RSpec.describe Parser do
   describe ".decode" do
@@ -8,7 +9,7 @@ RSpec.describe Parser do
 
     it "parses a compound param" do
       expect(Parser.decode("name=sally&job=developer")).to match({
-        name: "foo",
+        name: "sally",
         job: "developer",
       })
     end
@@ -39,7 +40,7 @@ RSpec.describe Parser do
         })
       end
 
-      xit "with multiple hashes will parse correctly" do
+      it "with multiple hashes will parse correctly" do
         message = URI::encode("Hello world!")
         expect(Parser.decode("user[name]=mike&user[pets]=cats,dogs&message[body]=#{message}")).to match({
           user: {
