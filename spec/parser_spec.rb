@@ -54,7 +54,7 @@ RSpec.describe Parser do
 
       xit "with a 3 level hash will parse correctly" do
         message = URI::encode("Hello world!")
-        expect(Parser.decode("user[name]=mike&user[pets][name]=fido&message[body]=#{message}"to match({
+        expect(Parser.decode("user[name]=mike&user[pets][name]=fido&message[body]=#{message}")).to match({
           user: {
             name: "mike",
             pets: {
